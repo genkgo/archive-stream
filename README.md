@@ -1,6 +1,6 @@
 # ArchiveStream Message Body (PSR-7)
 
-Stream a ZIP file (memory efficient) as a PSR-7 message
+Stream a ZIP file (memory efficient) as a PSR-7 message.
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/genkgo/archive-stream/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/genkgo/archive-stream/)
 [![Code Coverage](https://scrutinizer-ci.com/g/genkgo/archive-stream/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/genkgo/archive-stream/)
@@ -13,6 +13,10 @@ Use composer to add the package to your dependencies.
 composer require genkgo/archive-stream
 ```
 
+For PHP 5.6, use version 3.0.3 or lower.
+```sh
+composer require genkgo/archive-stream@3.0.3
+```
 
 ## Getting Started
 
