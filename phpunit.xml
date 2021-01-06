@@ -11,4 +11,9 @@
         <directory>./test/Unit</directory>
         <directory>./test/Integration</directory>
     </testsuite>
+    <coverage>
+        <include>
+            <directory suffix=".php">./src</directory>
+        </include>
+    </coverage>
 </phpunit>
