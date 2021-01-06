@@ -34,6 +34,3 @@ jobs:
         run: ./vendor/bin/phpstan analyse -l 5 test
       - name: Code Style
         run: ./vendor/bin/php-cs-fixer fix --dry-run --verbose --config .php_cs.dist ./src ./test
-
-      - name: Send code to Scrutinizer
-        run: wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover coverage.clover
