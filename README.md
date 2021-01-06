@@ -2,7 +2,7 @@
 
 Stream a ZIP file (memory efficient) as a PSR-7 message.
 
-![workflow code check](https://github.com/genkgo/archive-stream/workflows/.github/workflows/code_checks.yml/badge.svg)
+![workflow code check](https://github.com/genkgo/archive-stream/workflows/code%20check/badge.svg)
 
 ## Installation
 
