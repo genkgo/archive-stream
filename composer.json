@@ -10,6 +10,9 @@
         "psr/http-message": "~1.0.0",
         "ext-gmp": "*"
     },
+    "suggest": {
+        "ext-zlib": "Creater gzipped tar files (tar.gz)"
+    },
     "provide": {
         "psr/http-message-implementation": "1.0.0"
     },
@@ -18,7 +21,8 @@
         "phpstan/phpstan": "^0.12.48",
         "phpstan/phpstan-phpunit": "^0.12.6",
         "friendsofphp/php-cs-fixer": "^2.9",
-        "ext-zip": "*"
+        "ext-zip": "*",
+        "ext-zlib": "*"
     },
     "autoload": {
 		"psr-4": {

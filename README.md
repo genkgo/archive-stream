@@ -28,6 +28,8 @@ use Genkgo\ArchiveStream\EmptyDirectory;
 use Genkgo\ArchiveStream\FileContent;
 use Genkgo\ArchiveStream\Psr7Stream;
 use Genkgo\ArchiveStream\StringContent;
+use Genkgo\ArchiveStream\TarGzReader;
+use Genkgo\ArchiveStream\TarReader;
 use Genkgo\ArchiveStream\ZipReader;
 
 $archive = (new Archive())
@@ -40,6 +42,18 @@ $archive = (new Archive())
 
 $response = $response->withBody(
     new Psr7Stream(new ZipReader($archive))
+);
+
+// or for tar files
+
+$response = $response->withBody(
+    new Psr7Stream(new TarReader($archive))
+);
+
+// or for tar.gz files
+
+$response = $response->withBody(
+    new Psr7Stream(new TarGzReader(new TarReader($archive)))
 );
 ```
 
@@ -63,7 +77,7 @@ $response = new StreamedResponse(function () use ($stream) {
 
 ## Requirements
 
-  * PHP >=5.6.0
+  * PHP >=7.3.0
   * gmp extension
   * psr/http-message
 
