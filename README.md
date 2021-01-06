@@ -2,6 +2,8 @@
 
 Stream a ZIP file (memory efficient) as a PSR-7 message.
 
+![workflow code check](https://github.com/genkgo/archive-stream/workflows/.github/workflows/code_checks.yml/badge.svg)
+
 ## Installation
 
 Use composer to add the package to your dependencies.

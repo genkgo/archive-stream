@@ -1,5 +1,5 @@
 # .github/workflows/code_checks.yaml
-name: Code_Checks
+name: code check
 
 on:
   pull_request: null
