@@ -2,9 +2,6 @@
 
 Stream a ZIP file (memory efficient) as a PSR-7 message.
 
-[![Code Coverage](https://scrutinizer-ci.com/g/genkgo/archive-stream/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/genkgo/archive-stream/)
-[![Build Status](https://travis-ci.org/genkgo/archive-stream.png?branch=master)](https://travis-ci.org/genkgo/archive-stream)
-
 ## Installation
 
 Use composer to add the package to your dependencies.

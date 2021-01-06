@@ -21,13 +21,13 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: gmp, zip, zlib
-          coverage: xdebug
+          coverage: none
 
       - name: Download dependencies
         run: composer update --no-ansi --prefer-stable --prefer-dist --no-interaction --no-progress --no-suggest
 
       - name: Run tests
-        run: ./vendor/bin/phpunit -c phpunit.xml --coverage-clover=coverage.clover
+        run: ./vendor/bin/phpunit -c phpunit.xml
       - name: Static analysis for source
         run: ./vendor/bin/phpstan analyse -l max src
       - name: Static analysis for tests
