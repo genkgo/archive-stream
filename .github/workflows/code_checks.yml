@@ -21,7 +21,7 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: gmp, zip, zlib
-          coverage: none
+          coverage: xdebug
 
       - name: Download dependencies
         run: composer update --no-ansi --prefer-stable --prefer-dist --no-interaction --no-progress --no-suggest
