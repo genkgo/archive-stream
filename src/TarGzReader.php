@@ -36,6 +36,10 @@ final class TarGzReader implements ArchiveReader
     public function read(int $blockSize): \Generator
     {
         $deflateContext = \deflate_init(\ZLIB_ENCODING_GZIP, ['level' => $this->level]);
+        if ($deflateContext === false) {
+            throw new \UnexpectedValueException('Cannot open deflate context');
+        }
+
         $generator = $this->tarReader->read($blockSize);
         foreach ($generator as $stream) {
             while ($stream->eof() === false) {
@@ -58,8 +62,13 @@ final class TarGzReader implements ArchiveReader
             }
         }
 
+        $encoded = \deflate_add($deflateContext, '', \ZLIB_FINISH);
+        if ($encoded === false) {
+            throw new \UnexpectedValueException('Failed to encode last chunk of tar data');
+        }
+
         $stream = new \SplTempFileObject();
-        $stream->fwrite(\deflate_add($deflateContext, '', \ZLIB_FINISH));
+        $stream->fwrite($encoded);
         $stream->rewind();
         yield $stream;
     }
