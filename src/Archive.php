@@ -7,19 +7,14 @@ namespace Genkgo\ArchiveStream;
 final class Archive
 {
     /**
-     * @var \AppendIterator|ContentInterface[]
+     * @var \Traversable|ContentInterface[]
      */
-    private $content;
+    private $contents = [];
 
     /**
      * @var string
      */
     private $comment = '';
-
-    public function __construct()
-    {
-        $this->content = new \AppendIterator();
-    }
 
     /**
      * @param ContentInterface $content
@@ -28,18 +23,22 @@ final class Archive
     public function withContent(ContentInterface $content): Archive
     {
         $clone = clone $this;
-        $clone->content->append(new \ArrayIterator([$content]));
+        $clone->contents[] = new \ArrayIterator([$content]);
         return $clone;
     }
 
     /**
-     * @param \Iterator|ContentInterface[] $contents
+     * @param iterable|ContentInterface[] $contents
      * @return Archive
      */
-    public function withContents(\Iterator $contents): Archive
+    public function withContents(iterable $contents): Archive
     {
+        if (\is_array($contents)) {
+            $contents = new \ArrayIterator($contents);
+        }
+
         $clone = clone $this;
-        $clone->content->append($contents);
+        $clone->contents[] = $contents;
         return $clone;
     }
 
@@ -59,7 +58,11 @@ final class Archive
      */
     public function getContents(): iterable
     {
-        return $this->content;
+        foreach ($this->contents as $contents) {
+            foreach ($contents as $content) {
+                yield $content;
+            }
+        }
     }
 
     /**
