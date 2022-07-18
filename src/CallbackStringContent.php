@@ -44,7 +44,13 @@ final class CallbackStringContent implements ContentInterface
             throw new \UnexpectedValueException('Cannot create in-memory resource');
         }
 
-        \fwrite($resource, \call_user_func($this->callback));
+        /** @var string $data */
+        $data = \call_user_func($this->callback);
+        if (!\is_string($data)) {
+            throw new \UnexpectedValueException('Callback should return string');
+        }
+
+        \fwrite($resource, $data);
         \rewind($resource);
         return $resource;
     }

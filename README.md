@@ -11,7 +11,7 @@ Use composer to add the package to your dependencies.
 composer require genkgo/archive-stream
 ```
 
-For PHP 5.6, use version 3.0.3 or lower.
+For PHP 7.4, use version 3.0.3 or lower.
 ```sh
 composer require genkgo/archive-stream@3.0.3
 ```
