@@ -7,7 +7,7 @@ namespace Genkgo\ArchiveStream;
 final class Archive
 {
     /**
-     * @var \Traversable|ContentInterface[]
+     * @var array<array<ContentInterface>|\Traversable<mixed, ContentInterface>>
      */
     private $contents = [];
 
