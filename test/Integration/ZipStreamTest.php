@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Genkgo\TestArchiveStream\Integration;
 
 use Genkgo\ArchiveStream\Archive;
-use Genkgo\ArchiveStream\CallbackStringContents;
+use Genkgo\ArchiveStream\CallbackContents;
 use Genkgo\ArchiveStream\EmptyDirectory;
 use Genkgo\ArchiveStream\StringContent;
 use Genkgo\ArchiveStream\ZipReader;
@@ -125,7 +125,7 @@ final class ZipStreamTest extends AbstractTestCase
     {
         $archive = (new Archive())
             ->withContents(
-                new CallbackStringContents(
+                new CallbackContents(
                     function () {
                         return new \ArrayIterator([
                             new EmptyDirectory('directory'),

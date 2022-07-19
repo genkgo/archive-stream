@@ -7,7 +7,7 @@ namespace Genkgo\ArchiveStream;
 /**
  * @implements \IteratorAggregate<int, string>
  */
-final class CallbackStringContents implements \IteratorAggregate
+final class CallbackContents implements \IteratorAggregate
 {
     /**
      * @var callable
