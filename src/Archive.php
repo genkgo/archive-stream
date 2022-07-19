@@ -7,7 +7,7 @@ namespace Genkgo\ArchiveStream;
 final class Archive
 {
     /**
-     * @var array<array<ContentInterface>|\Traversable<mixed, ContentInterface>>
+     * @var array<iterable<ContentInterface>>
      */
     private $contents = [];
 
@@ -33,10 +33,6 @@ final class Archive
      */
     public function withContents(iterable $contents): Archive
     {
-        if (\is_array($contents)) {
-            $contents = new \ArrayIterator($contents);
-        }
-
         $clone = clone $this;
         $clone->contents[] = $contents;
         return $clone;
