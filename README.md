@@ -6,12 +6,12 @@ Stream a ZIP file (memory efficient) as a PSR-7 message.
 
 ## Installation
 
-Use composer to add the package to your dependencies.
+Use composer to add the package to your dependencies. Support PHP versions: 7.4, 8.0, 8.1.
 ```sh
 composer require genkgo/archive-stream
 ```
 
-For PHP 5.6, use version 3.0.3 or lower.
+For PHP 7.3, use version 3.1.x or lower.
 ```sh
 composer require genkgo/archive-stream@3.0.3
 ```
@@ -21,6 +21,7 @@ composer require genkgo/archive-stream@3.0.3
 ```php
 <?php
 use Genkgo\ArchiveStream\Archive;
+use Genkgo\ArchiveStream\CallbackContents;
 use Genkgo\ArchiveStream\CallbackStringContent;
 use Genkgo\ArchiveStream\EmptyDirectory;
 use Genkgo\ArchiveStream\FileContent;
@@ -36,7 +37,9 @@ $archive = (new Archive())
     }))
     ->withContent(new StringContent('string.txt', 'data'))
     ->withContent(new FileContent('file.txt', 'local/file/name.txt'))
-    ->withContent(new EmptyDirectory('directory'));
+    ->withContent(new EmptyDirectory('directory'))
+    ->withContents([new StringContent('string2.txt', 'data')])
+    ->withContents(new CallbackContents(fn () => yield new StringContent('string3.txt', 'data')));
 
 $response = $response->withBody(
     new Psr7Stream(new ZipReader($archive))

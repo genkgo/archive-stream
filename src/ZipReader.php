@@ -60,7 +60,7 @@ final class ZipReader implements ArchiveReader
     }
 
     /**
-     * @param int $blockSize
+     * @param int<0, max> $blockSize
      * @return \Generator<int, \SplTempFileObject>
      */
     public function read(int $blockSize): \Generator
@@ -86,6 +86,7 @@ final class ZipReader implements ArchiveReader
             yield $this->completeResourceStream();
         }
 
+        /** @var array<int, mixed> $file */
         foreach ($this->files as $file) {
             yield $this->addCdrFile($file);
         }
@@ -242,10 +243,11 @@ final class ZipReader implements ArchiveReader
         $this->current_file_stream[2] = $crc;
         $this->current_file_stream[3] = \gmp_strval($this->zlen);
         $this->current_file_stream[4] = \gmp_strval($this->len);
-        $this->current_file_stream[5] += \gmp_strval(\gmp_add(\gmp_init(\strlen($data)), $this->zlen));
+        $this->current_file_stream[5] += \gmp_intval(\gmp_add(\gmp_init(\strlen($data)), $this->zlen));
         \ksort($this->current_file_stream);
 
         // Add to cdr and increment offset - can't call directly because we pass an array of params
+        /** @phpstan-ignore-next-line */
         $this->addToCdr(...$this->current_file_stream);
 
         $stream = new \SplTempFileObject();
@@ -282,6 +284,7 @@ final class ZipReader implements ArchiveReader
      */
     private function addCdrFile(array $args): \SplTempFileObject
     {
+        /** @var string $name */
         list($name, $meth, $crc, $zlen, $len, $ofs, $genb, $file_attribute) = $args;
 
         // convert the 64 bit ints to 2 32bit ints
