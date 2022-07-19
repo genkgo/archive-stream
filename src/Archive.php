@@ -23,7 +23,7 @@ final class Archive
     public function withContent(ContentInterface $content): Archive
     {
         $clone = clone $this;
-        $clone->contents[] = new \ArrayIterator([$content]);
+        $clone->contents[] = [$content];
         return $clone;
     }
 
