@@ -6,7 +6,7 @@ Stream a ZIP file (memory efficient) as a PSR-7 message.
 
 ## Installation
 
-Use composer to add the package to your dependencies. Support PHP versions: 7.4, 8.0, 8.1, 8.2.
+Use composer to add the package to your dependencies. Supports [every PHP version that is receiving security updates](https://www.php.net/supported-versions.php).
 ```sh
 composer require genkgo/archive-stream
 ```
@@ -78,7 +78,7 @@ $response = new StreamedResponse(function () use ($stream) {
 
 ## Requirements
 
-  * PHP >=7.3.0
+  * PHP version actively receiving security updates
   * gmp extension
   * psr/http-message
 
