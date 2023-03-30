@@ -44,7 +44,7 @@ final class ZipReader implements ArchiveReader
     /**
      * @var \GMP
      */
-    private $cdr_ofs = 0;
+    private $cdr_ofs;
 
     /**
      * @var \GMP
