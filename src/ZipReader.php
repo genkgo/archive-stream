@@ -42,12 +42,12 @@ final class ZipReader implements ArchiveReader
     private $files = [];
 
     /**
-     * @var int
+     * @var \GMP
      */
     private $cdr_ofs = 0;
 
     /**
-     * @var int
+     * @var \GMP
      */
     private $cdr_len;
 
@@ -57,6 +57,8 @@ final class ZipReader implements ArchiveReader
     public function __construct(Archive $archive)
     {
         $this->archive = $archive;
+        $this->cdr_ofs = \gmp_init(0);
+        $this->cdr_len = \gmp_init(0);
     }
 
     /**
@@ -272,7 +274,7 @@ final class ZipReader implements ArchiveReader
     private function addToCdr(string $name, int $method, int $crc, string $zlen, string $len, int $rec_len, int $genb = 0, int $fattr = 0x20)
     {
         $this->files[] = [$name, $method, $crc, $zlen, $len, $this->cdr_ofs, $genb, $fattr];
-        $this->cdr_ofs += $rec_len;
+        $this->cdr_ofs = \gmp_add($this->cdr_ofs, $rec_len);
     }
 
     /**
@@ -342,7 +344,7 @@ final class ZipReader implements ArchiveReader
         // pack fields, then append name and comment
         $ret = PackHelper::packFields($fields) . $name . $extra . $comment;
 
-        $this->cdr_len += \strlen($ret);
+        $this->cdr_len = \gmp_add($this->cdr_len, \strlen($ret));
 
         $stream = new \SplTempFileObject();
         $stream->fwrite($ret);
@@ -395,7 +397,7 @@ final class ZipReader implements ArchiveReader
      */
     private function addCdrEofLocatorZip64(): \SplTempFileObject
     {
-        list($cdr_ofs_low, $cdr_ofs_high) = PackHelper::int64Split($this->cdr_len + $this->cdr_ofs);
+        list($cdr_ofs_low, $cdr_ofs_high) = PackHelper::int64Split(\gmp_add($this->cdr_len, $this->cdr_ofs));
 
         $fields = [                    // (from V,F of APPNOTE.TXT)
             ['V', 0x07064b50],         // zip64 end of central dir locator signature
@@ -454,7 +456,7 @@ final class ZipReader implements ArchiveReader
     private function clear(): void
     {
         $this->files = [];
-        $this->cdr_ofs = 0;
-        $this->cdr_len = 0;
+        $this->cdr_ofs = \gmp_init(0);
+        $this->cdr_len = \gmp_init(0);
     }
 }
