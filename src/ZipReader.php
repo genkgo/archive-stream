@@ -243,8 +243,8 @@ final class ZipReader implements ArchiveReader
 
         // Update cdr for file record
         $this->current_file_stream[2] = $crc;
-        $this->current_file_stream[3] = \gmp_strval($this->zlen);
-        $this->current_file_stream[4] = \gmp_strval($this->len);
+        $this->current_file_stream[3] = $this->zlen;
+        $this->current_file_stream[4] = $this->len;
         $this->current_file_stream[5] += \gmp_intval(\gmp_add(\gmp_init(\strlen($data)), $this->zlen));
         \ksort($this->current_file_stream);
 
@@ -264,14 +264,13 @@ final class ZipReader implements ArchiveReader
      * @param string $name Path / name of the file.
      * @param int $method Method of compression to use.
      * @param int $crc Computed checksum of the file.
-     * @param string $zlen Compressed size.
-     * @param string $len Uncompressed size.
+     * @param \GMP $zlen Compressed size.
+     * @param \GMP $len Uncompressed size.
      * @param int $rec_len Size of the record.
      * @param int $genb General purpose bit flag.
      * @param int $fattr File attribute bit flag.
-     * @return void
      */
-    private function addToCdr(string $name, int $method, int $crc, string $zlen, string $len, int $rec_len, int $genb = 0, int $fattr = 0x20)
+    private function addToCdr(string $name, int $method, int $crc, \GMP $zlen, \GMP $len, int $rec_len, int $genb = 0, int $fattr = 0x20): void
     {
         $this->files[] = [$name, $method, $crc, $zlen, $len, $this->cdr_ofs, $genb, $fattr];
         $this->cdr_ofs = \gmp_add($this->cdr_ofs, $rec_len);
