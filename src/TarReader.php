@@ -47,30 +47,22 @@ final class TarReader implements ArchiveReader
             $name = $content->getName();
             $nameLength = \strlen($name);
 
-            if ($nameLength > 100) {
-                $dirname = \dirname($content->getName());
-                $basename = \basename($content->getName());
+            $dirname = \dirname($content->getName());
+            $basename = \basename($content->getName());
 
-                // Remove '.' from the current directory
-                $dirname = $dirname === '.' ? '' : $dirname;
+            // Remove '.' from the current directory
+            $dirname = $dirname === '.' ? '' : $dirname;
 
-                // Remove trailing slash from directory name, because tar implies it.
-                if (\substr($dirname, -1) === '/') {
-                    $dirname = \substr($dirname, 0, -1);
-                }
+            // Remove trailing slash from directory name, because tar implies it.
+            if (\str_ends_with($dirname, '/')) {
+                $dirname = \substr($dirname, 0, -1);
+            }
 
-                if (\strlen($basename) > 100 || \strlen($dirname) > 155) {
-                    yield $this->streamResourceHeader('././@LongLink', '', 'L', \strlen($name), 0);
+            if ($nameLength > 99) {
+                $pax = $this->generatePax($dirname . '/' . $basename, );
 
-                    for ($s = 0; $s < $nameLength; $s += 512) {
-                        yield $this->streamResourceData(\substr($name, $s, 512));
-                    }
-
-                    $name = \substr($name, 0, 100);
-                } else {
-                    $name = $basename;
-                    $prefix = $dirname;
-                }
+                yield $this->streamResourceHeader('', '', 'x', \strlen($pax), 0);
+                yield $this->streamResourceData($pax);
             }
 
             yield $this->streamResourceHeader(
@@ -110,24 +102,24 @@ final class TarReader implements ArchiveReader
     {
         $fieldsFirst = [
             ['a100', \substr($name, 0, 100)],
-            ['a8',   \sprintf("%6s ", \decoct(33279))], //mode 0777
-            ['a8',   \sprintf("%6s ", \decoct(0))], //uid
-            ['a8',   \sprintf("%6s ", \decoct(0))], //gid
-            ['a12',  \sprintf("%11s ", \decoct($size))],
-            ['A12',  \sprintf("%11s ", \decoct($time))],
+            ['a8', \sprintf("%6s ", \decoct(33279))], //mode 0777
+            ['a8', \sprintf("%6s ", \decoct(0))], //uid
+            ['a8', \sprintf("%6s ", \decoct(0))], //gid
+            ['a12', \sprintf("%11s ", \decoct($size))],
+            ['A12', \sprintf("%11s ", \decoct($time))],
         ];
 
         $fieldsLast = [
-            ['a1',   $type],
+            ['a1', $type],
             ['a100', ''],
-            ['a6',   'ustar'],
-            ['a2',   ''],
-            ['a32',  ''],
-            ['a32',  ''],
-            ['a8',   ''],
-            ['a8',   ''],
+            ['a6', 'ustar'],
+            ['a2', '00'],
+            ['a32', ''],
+            ['a32', ''],
+            ['a8', ''],
+            ['a8', ''],
             ['a155', \substr($prefix, 0, 155)],
-            ['a12',  ''],
+            ['a12', ''],
         ];
 
         // pack fields and calculate "total" length
@@ -161,5 +153,20 @@ final class TarReader implements ArchiveReader
         $stream->fwrite(\pack("a512", $data));
         $stream->rewind();
         return $stream;
+    }
+
+    private function generatePax(string $path): string
+    {
+        $lines = '';
+        foreach (['path' => $path] as $name => $value) {
+            // build the line and the size
+            $line = ' ' . $name . '=' . $value . "\n";
+            $size = \strlen((string)\strlen($line)) + \strlen($line);
+
+            // add the line
+            $lines .= $size . $line;
+        }
+
+        return $lines;
     }
 }

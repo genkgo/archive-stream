@@ -62,7 +62,7 @@ final class ZipReader implements ArchiveReader
     }
 
     /**
-     * @param int<0, max> $blockSize
+     * @param int<1, max> $blockSize
      * @return \Generator<int, \SplTempFileObject>
      */
     public function read(int $blockSize): \Generator
