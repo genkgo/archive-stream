@@ -33,4 +33,8 @@ jobs:
       - name: Static analysis for tests
         run: ./vendor/bin/phpstan analyse -l 5 test
       - name: Code Style
+        if: ${{ matrix.php != '8.4' }}
         run: ./vendor/bin/php-cs-fixer fix --dry-run --verbose --config .php-cs-fixer.dist.php ./src ./test
+      - name: Code Style
+        if: ${{ matrix.php == '8.4' }}
+        run: PHP_CS_FIXER_IGNORE_ENV=1 ./vendor/bin/php-cs-fixer fix --dry-run --verbose --config .php-cs-fixer.dist.php ./src ./test
