@@ -36,7 +36,7 @@ final class PackHelper
     /**
      * Create a format string and argument list for pack(), then call pack() and return the result.
      *
-     * @param array<int, array<int, mixed>> $fields Key is format string and the value is the data to pack.
+     * @param array<int|string, array<int, int|float|string>> $fields Key is format string and the value is the data to pack.
      * @return string Binary packed data returned from pack().
      */
     public static function packFields(array $fields)
@@ -47,21 +47,14 @@ final class PackHelper
         // populate format string and argument list
         foreach ($fields as $field) {
             $fmt .= $field[0];
-            $args[] = $field[1];
+            $args[] = (string)$field[1];
         }
 
         // prepend format string to argument list
         \array_unshift($args, $fmt);
 
         // build output string from header and compressed data
-        /** @var false|string $packed */
-        /** @var string[] $args */
-        $packed = \pack(...$args);
-        if ($packed === false) {
-            throw new \UnexpectedValueException('Cannot pack fields');
-        }
-
-        return $packed;
+        return \pack(...$args);
     }
 
     /**

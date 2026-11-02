@@ -50,7 +50,7 @@ final class Archive
     }
 
     /**
-     * @return array<int, ContentInterface>
+     * @return iterable<int, ContentInterface>
      */
     public function getContents(): iterable
     {

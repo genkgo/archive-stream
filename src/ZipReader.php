@@ -290,6 +290,10 @@ final class ZipReader implements ArchiveReader
         /** @var \GMP $zlen */
         /** @var \GMP $len */
         /** @var \GMP $ofs */
+        /** @var int $meth */
+        /** @var int $genb */
+        /** @var int $crc */
+        /** @var int $file_attribute */
         list($name, $meth, $crc, $zlen, $len, $ofs, $genb, $file_attribute) = $args;
 
         // convert the 64 bit ints to 2 32bit ints
